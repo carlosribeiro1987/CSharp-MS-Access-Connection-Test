@@ -14,8 +14,9 @@ namespace Access_CSharpConnectionExamble {
         public Form1() {
             InitializeComponent();
         }
-        string AccessConnectionString = "";
-        string tableName = "";
+        
+        string AccessConnectionString = ""; //The connection string will be stored here
+        string tableName = ""; //The name of the table populated in DataGridView
 
         private void btnOpen_Click(object sender, EventArgs e) {
             openFileDialog1.ShowDialog();
@@ -26,28 +27,28 @@ namespace Access_CSharpConnectionExamble {
         }
 
         public void ConnectToAccessDB() {
-            OleDbConnection AccessConnection = new OleDbConnection();
-            AccessConnection.ConnectionString = AccessConnectionString;
+            OleDbConnection AccessConnection = new OleDbConnection(); //Create a new connection
+            AccessConnection.ConnectionString = AccessConnectionString; //Specifies the connection string
             try {
-                AccessConnection.Open();
-                OleDbCommand command = new OleDbCommand();
-                command.CommandText = "SELECT * FROM "+tableName+";";
-                command.CommandType = CommandType.Text;
-                command.Connection = AccessConnection;
+                AccessConnection.Open(); //Open the connection
+                OleDbCommand command = new OleDbCommand(); 
+                command.CommandText = "SELECT * FROM "+tableName+";"; //Select all fields from the table spacified in "Table Name" textBox
+                command.CommandType = CommandType.Text; //Sets command type to text
+                command.Connection = AccessConnection; 
 
-                OleDbDataReader dataDB;
-                dataDB = command.ExecuteReader();
+                OleDbDataReader dataDB; //Create a data reader to receive the DB data
+                dataDB = command.ExecuteReader(); //Execute the command
 
 
-                DataTable dbTable = new DataTable();
-                dbTable.Load(dataDB);
-                dgvDataBase.DataSource = dbTable;
-                dgvDataBase.Refresh();
+                DataTable dbTable = new DataTable(); //Create a DataTable to receive data
+                dbTable.Load(dataDB); // Load data return by command
+                dgvDataBase.DataSource = dbTable; //Populates datagridView with the fields of DB table
+                dgvDataBase.Refresh(); //Refresh DataGridView
 
-                AccessConnection.Close();
+                AccessConnection.Close(); //Close connection
             }
             catch (Exception ex) {
-                MessageBox.Show("Connection Error!\n\n" + ex.Message);
+                MessageBox.Show("Connection Error!\n\n" + ex.Message); //Returns MessageBox error 
             }
         }
 
